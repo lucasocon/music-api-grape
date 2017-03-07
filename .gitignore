@@ -57,3 +57,6 @@ build-iPhoneSimulator/
 
 # Temporary files
 ~*.xlsx
+
+#ruby conf
+.ruby-*

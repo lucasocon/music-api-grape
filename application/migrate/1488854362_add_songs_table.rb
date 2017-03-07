@@ -7,8 +7,8 @@ Sequel.migration do
       String :banner
       String :promotion, text: true
       Integer :duration
-      Integer :album_id
-      Integer :artist_id
+      foreign_key :album_id, :albums
+      foreign_key :artist_id, :artists
       FalseClass :featured
 
       index :album_id
