@@ -1,0 +1,5 @@
+en:
+  errors:
+    email?: must be an email
+    datetime_str?: must be in format YYYY-MM-DD HH:MM:SS
+    phone?: must be valid format (ex - 8005556262)

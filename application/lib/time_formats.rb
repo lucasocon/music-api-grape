@@ -1,0 +1,10 @@
+Date::DATE_FORMATS[:date] = '%m/%d/%Y'
+Date::DATE_FORMATS[:date_sql] = '%Y-%m-%d'
+
+Time::DATE_FORMATS[:date] = '%m/%d/%Y'
+Time::DATE_FORMATS[:date_sql] = '%Y-%m-%d'
+Time::DATE_FORMATS[:date_ymd] = '%Y%m%d'
+Time::DATE_FORMATS[:datetime] = '%m/%d/%Y %l:%M %P %Z'
+Time::DATE_FORMATS[:datetime_no_timezone] = '%m/%d/%Y %l:%M %P'
+Time::DATE_FORMATS[:time] = '%-l:%M%P'
+Time::DATE_FORMATS[:time_upcase] = '%-l:%M %p'

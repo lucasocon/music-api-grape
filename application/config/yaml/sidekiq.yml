@@ -1,0 +1,8 @@
+:concurrency: 20
+:queues:
+  - [priority, 7]
+  - [default, 5]
+  - [seldom, 3]
+staging:
+  :concurrency: 10
+:require: ./application/api.rb
