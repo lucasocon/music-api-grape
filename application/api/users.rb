@@ -1,15 +1,5 @@
 class Api
   resource :users do
-    params do
-      includes :basic_search
-    end
-    get do
-      users = SEQUEL_DB[:users].all
-      {
-        data: users
-      }
-    end
-
     post do
       result = CreateUserValidation.new(params).validate
       if result.success? && user = Models::User.create(result.output)
