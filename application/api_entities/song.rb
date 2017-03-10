@@ -4,7 +4,7 @@ class Api
       expose :name
       expose :genre
       expose :banner
-      expose :promotion, text: true
+      expose :promotion
       expose :duration
       expose :featured
 

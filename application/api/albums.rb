@@ -1,9 +1,9 @@
 class Api
   resource :albums do
     get do
-      # Search by lupa
+      #search by lupa
       albums = Models::Album.all
-      Entities::Artist.represent(albums)
+      Entities::Album.represent(albums)
     end
 
     post do
@@ -19,17 +19,17 @@ class Api
       album = Models::Album[params[:id]]
       return error!(:not_found, 404) unless album
 
-      Entities::User.represent(album)
+      Entities::Album.represent(album)
     end
 
     put ':id' do
       album = Models::Album[params[:id]]
       return error!(:not_found, 404) unless album
 
-      result = EditArtistValidation.new(params).validate
+      result = EditAlbumValidation.new(params).validate
       if result.success?
         album.update(result.output)
-        Entities::User.represent(album)
+        Entities::Album.represent(album)
       else
         error!(result.messages, 400)
       end

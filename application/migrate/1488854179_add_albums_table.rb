@@ -4,7 +4,7 @@ Sequel.migration do
       primary_key :id
       String :name
       String :album_art
-      foreign_key :artist_id, :artists
+      Integer :artist_id
       DateTime :created_at
       DateTime :updated_at
 

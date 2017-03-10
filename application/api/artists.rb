@@ -1,7 +1,7 @@
 class Api
   resource :artists do
     get do
-      # Search by lupa
+      #search by lupa
       artists = Models::Artist.all
       Entities::Artist.represent(artists)
     end
@@ -19,7 +19,7 @@ class Api
       artist = Models::Artist[params[:id]]
       return error!(:not_found, 404) unless artist
 
-      Entities::User.represent(artist)
+      Entities::Artist.represent(artist)
     end
 
     put ':id' do
@@ -29,10 +29,16 @@ class Api
       result = EditArtistValidation.new(params).validate
       if result.success?
         artist.update(result.output)
-        Entities::User.represent(artist)
+        Entities::Artist.represent(artist)
       else
         error!(result.messages, 400)
       end
+    end
+
+    delete ':id' do
+      artist = Models::Artist[params[:id]]
+      return error!(:not_found, 404) unless artist
+      artist.delete
     end
   end
 end

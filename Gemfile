@@ -12,7 +12,8 @@ gem 'grape-entity', '0.6.0' # define api input and output
 gem 'grape-swagger', '0.25.1' # document api
 gem 'grape-swagger-entity', '0.1.5' # parse entities in api
 gem 'rack-indifferent', '1.1' # makes param keys symbols
-gem 'mysql2', '0.4.5'
+# gem 'mysql2', '0.4.5'
+gem 'pg', '0.19.0'
 gem 'sequel', '4.40.0'
 gem 'mail', '2.6.4'
 gem 'uuidtools', ' 2.1.5'

@@ -107,7 +107,7 @@ GEM
       tool (~> 0.2)
     mustermann-grape (0.4.0)
       mustermann (= 0.4.0)
-    mysql2 (0.4.5)
+    pg (0.19.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -181,7 +181,7 @@ DEPENDENCIES
   grape-swagger-entity (= 0.1.5)
   hanami-validations (= 0.6.0)
   mail (= 2.6.4)
-  mysql2 (= 0.4.5)
+  pg (= 0.19.0)
   pry (= 0.10.4)
   rack (= 1.6.4)
   rack-indifferent (= 1.1)
@@ -199,4 +199,4 @@ RUBY VERSION
    ruby 2.3.3p222
 
 BUNDLED WITH
-   1.13.6
+   1.14.6

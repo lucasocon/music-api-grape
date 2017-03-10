@@ -89,7 +89,3 @@ To apply the migration to your test database: `RACK_ENV=test bundle exec rake db
 Run your tests using:
 
 `make test`
-
-Run a specific test by providing the path to the file:
-
-`bundle exec rspec ./application/spec/users_spec.rb`
