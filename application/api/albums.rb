@@ -1,7 +1,6 @@
 class Api
   resource :albums do
     get do
-      #search by lupa
       albums = Models::Album.all
       Entities::Album.represent(albums)
     end
@@ -33,6 +32,12 @@ class Api
       else
         error!(result.messages, 400)
       end
+    end
+
+    delete ':id' do
+      album = Models::Album[params[:id]]
+      return error!(:not_found, 404) unless album
+      album.destroy
     end
   end
 end

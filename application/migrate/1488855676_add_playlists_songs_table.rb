@@ -1,11 +1,11 @@
 Sequel.migration do
   change do
     create_table(:playlists_songs) do
-      foreign_key :playlist_id, :playlists
-      foreign_key :song_id, :songs
-      String :name
+      primary_key :id
+      Integer :playlist_id
+      Integer :song_id
 
-      index :name
+      index [:playlist_id, :song_id], unique: true
     end
   end
 end

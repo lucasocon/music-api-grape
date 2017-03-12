@@ -88,4 +88,10 @@ To apply the migration to your test database: `RACK_ENV=test bundle exec rake db
 
 Run your tests using:
 
-`make test`
+update DATABASE_URL in env.test
+
+createdb sample_test
+
+RACK_ENV=test rake db:migrate
+
+bundle exec rake spec

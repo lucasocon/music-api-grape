@@ -1,7 +1,6 @@
 class Api
   resource :artists do
     get do
-      #search by lupa
       artists = Models::Artist.all
       Entities::Artist.represent(artists)
     end
@@ -38,7 +37,7 @@ class Api
     delete ':id' do
       artist = Models::Artist[params[:id]]
       return error!(:not_found, 404) unless artist
-      artist.delete
+      artist.destroy
     end
   end
 end

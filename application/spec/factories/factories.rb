@@ -13,11 +13,11 @@ FactoryGirl.define do
     bio { Faker::Lorem.paragraph }
     factory :artist_with_albums do
       transient do
-        albums_count 5
+        albums_with_songs_count 5
       end
 
       after(:create) do |artist, evaluator|
-        create_list(:album, evaluator.albums_count, artist: artist)
+        create_list(:album_with_songs, evaluator.albums_with_songs_count, artist: artist)
       end
     end
   end
@@ -26,16 +26,43 @@ FactoryGirl.define do
     name { Faker::Name.name }
     album_art { Faker::Internet.url }
     association :artist, factory: :artist, strategy: :create
+    factory :album_with_songs do
+      transient do
+        album_with_songs_count 10
+      end
+
+      after(:create) do |album, evaluator|
+        create_list(:song, evaluator.album_with_songs_count,  album: album)
+      end
+    end
   end
 
   factory :song, class: Api::Models::Song do
     name { Faker::Name.name }
+    association :album, factory: :album, strategy: :create
     genre { Faker::Name.name }
     banner { Faker::Name.name }
     promotion { Faker::Name.name }
     duration { Faker::Number.between(40, 500) }
-    association :artist, factory: :artist, strategy: :build
-    association :album, factory: :album, strategy: :build
     featured { [true, false].sample }
+  end
+
+  factory :playlist, class: Api::Models::Playlist do
+    name { Faker::Name.name }
+
+    factory :playlist_with_songs do
+      after(:create) do |playlist, evaluator|
+        5.times{ FactoryGirl.create(:album_with_songs) }
+        songs = Api::Models::Song.dataset.order{RANDOM{}}.first(10)
+        songs.each do |song|
+          FactoryGirl.create(:playlists_songs, playlist_id: playlist.id, song_id: song.id)
+        end
+      end
+    end
+  end
+
+  factory :playlists_songs, class: Api::Models::PlaylistSong do
+    playlist
+    song
   end
 end

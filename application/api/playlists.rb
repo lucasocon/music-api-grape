@@ -1,13 +1,12 @@
 class Api
   resource :playlists do
     get do
-      # Search by lupa
       playlists = Models::Playlist.all
       Entities::Playlist.represent(playlists)
     end
 
     post do
-      result = CreateAlbumValidation.new(params).validate
+      result = CreatePlaylistValidation.new(params).validate
       if result.success? && playlist = Models::Playlist.create(result.output)
         Entities::Playlist.represent(playlist)
       else
@@ -35,20 +34,37 @@ class Api
       end
     end
 
-    post ':id/songs' do
+    put ':id/songs' do
       playlist = Models::Playlist[params[:id]]
-      return error!(:not_found, 404) unless playlist
+      song = Models::Song[params[:song_id]]
+      return error!(:not_found, 404) unless playlist && song
 
-      #service to add songs or bulk
+      song_to_add = Models::PlaylistSong.new(playlist_id: playlist.id, song_id: song.id)
+      begin
+        if song_to_add.save
+          Entities::Playlist.represent(playlist)
+        else
+          error!("Fail to add song to the current playlist.", 400)
+        end
+      rescue Sequel::UniqueConstraintViolation
+        error!("This song was already added to this playlist.", 400)
+      end
     end
 
     delete ':id/songs' do
       playlist = Models::Playlist[params[:id]]
-      songs_ids = params[:songs_ids] #array
+      song = Models::Song[params[:song_id]]
+      return error!(:not_found, 404) unless playlist && song
+
+      Models::PlaylistSong.where(playlist_id: playlist.id, song_id: song.id).destroy
+      Entities::Playlist.represent(playlist)
+    end
+
+    delete ':id' do
+      playlist = Models::Playlist[params[:id]]
       return error!(:not_found, 404) unless playlist
 
-      Models::PlaylistsAlbums.where(playlist_id: playlist.id, song_id: songs_ids).destroy
-      Entities::Playlist.represent(playlist.reload)
+      playlist.destroy
     end
   end
 end

@@ -7,10 +7,6 @@ class Api
       expose :promotion
       expose :duration
       expose :featured
-
-      expose :album, using: Entities::Album
-      expose :artist, using: Entities::Artist
-      expose :playlists, using: Entities::Playlist
     end
   end
 end
