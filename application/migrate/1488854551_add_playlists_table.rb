@@ -1,12 +1,9 @@
 Sequel.migration do
   change do
-    create_table(:playlists_songs) do
-      Integer :playlist_id
-      Integer :song_id
+    create_table(:playlists) do
+      primary_key :id
       String :name
 
-      index :playlist_id
-      index :song_id
       index :name
     end
   end

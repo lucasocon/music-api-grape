@@ -10,7 +10,6 @@ Sequel.migration do
       Integer :album_id
       FalseClass :featured
 
-      index :album_id
       index :name
     end
   end

@@ -18,7 +18,7 @@ class Api
       playlist = Models::Playlist[params[:id]]
       return error!(:not_found, 404) unless playlist
 
-      Entities::User.represent(playlist)
+      Entities::Playlist.represent(playlist)
     end
 
     put ':id' do

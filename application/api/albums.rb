@@ -39,5 +39,31 @@ class Api
       return error!(:not_found, 404) unless album
       album.destroy
     end
+
+    put ':id/songs' do
+      album = Models::Album[params[:id]]
+      song = Models::Song[params[:song_id]]
+      return error!(:not_found, 404) unless album && song
+
+      song_to_add = Models::AlbumSong.new(album_id: album.id, song_id: song.id)
+      begin
+        if song_to_add.save
+          Entities::Album.represent(album)
+        else
+          error!('Fail to add song to the current album.', 400)
+        end
+      rescue Sequel::UniqueConstraintViolation
+        error!('This song was already added to this album.', 400)
+      end
+    end
+
+    delete ':id/songs' do
+      album = Models::Album[params[:id]]
+      song = Models::Song[params[:song_id]]
+      return error!(:not_found, 404) unless album && song
+
+      Models::AlbumSong.where(album_id: album.id, song_id: song.id).destroy
+      Entities::Album.represent(album)
+    end
   end
 end
