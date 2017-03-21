@@ -17,7 +17,8 @@ FactoryGirl.define do
       end
 
       after(:create) do |artist, evaluator|
-        create_list(:album_with_songs, evaluator.albums_with_songs_count, artist: artist)
+        create_list(:album_with_songs, evaluator.albums_with_songs_count,
+                    artist: artist)
       end
     end
   end
@@ -26,20 +27,19 @@ FactoryGirl.define do
     name { Faker::Name.name }
     album_art { Faker::Internet.url }
     association :artist, factory: :artist, strategy: :create
-    factory :album_with_songs do
-      transient do
-        album_with_songs_count 10
-      end
 
+    factory :album_with_songs do
       after(:create) do |album, evaluator|
-        create_list(:song, evaluator.album_with_songs_count,  album: album)
+        create_list(:song, 10)
+        Api::Models::Song.each do |song|
+          FactoryGirl.create(:albums_songs, album_id: album.id, song_id: song.id)
+        end
       end
     end
   end
 
   factory :song, class: Api::Models::Song do
     name { Faker::Name.name }
-    association :album, factory: :album, strategy: :create
     genre { Faker::Name.name }
     banner { Faker::Name.name }
     promotion { Faker::Name.name }
@@ -63,6 +63,11 @@ FactoryGirl.define do
 
   factory :playlists_songs, class: Api::Models::PlaylistSong do
     playlist
+    song
+  end
+
+  factory :albums_songs, class: Api::Models::AlbumSong do
+    album
     song
   end
 end

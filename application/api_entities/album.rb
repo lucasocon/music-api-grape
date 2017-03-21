@@ -6,6 +6,7 @@ class Api
       expose :name
       expose :album_art
       expose :artist, using: Entities::Artist
+      expose :songs, using: Entities::Song
     end
 
     class AlbumWithoutArtist < Album
