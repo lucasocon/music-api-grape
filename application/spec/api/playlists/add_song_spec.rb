@@ -3,12 +3,21 @@ require 'spec_helper'
 describe 'PUT /api/playlists/:id/songs' do
   before :all do
     @playlist = create :playlist_with_songs
+    @other_playlist = create :playlist_with_songs
     @artist = create :artist_with_albums
+    header('token', @playlist.user.token)
   end
 
   it 'should add song to playlist' do
-    put("api/v1.0/playlists/#{@playlist.id}/songs", {song_id: @artist.songs.order{RANDOM{}}.first.id})
+    put("api/v1.0/playlists/#{@playlist.id}/songs", song_id: @artist.songs.order { RANDOM {} }.first.id)
     expect(last_response.status).to eq(200)
+  end
+
+  it 'should return not permissions to add song' do
+    put("api/v1.0/playlists/#{@other_playlist.id}/songs", song_id: @artist.songs.order { RANDOM {} }.first.id)
+    body = response_body
+    expect(last_response.status).to eq(400)
+    expect(body[:error]).to eq('You have no permissions to add a song to this playlist.')
   end
 
   it 'should return not found' do
@@ -19,7 +28,7 @@ describe 'PUT /api/playlists/:id/songs' do
   end
 
   it 'should return custom message to duplicate songs' do
-    put("api/v1.0/playlists/#{@playlist.id}/songs", {song_id: @playlist.songs.sample.id})
+    put("api/v1.0/playlists/#{@playlist.id}/songs", song_id: @playlist.songs.sample.id)
     body = response_body
     expect(last_response.status).to eq(400)
     expect(body.keys).to eq([:error])

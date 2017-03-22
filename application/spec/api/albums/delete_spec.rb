@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe 'DELETE /api/albums' do
   before :all do
+    @user = create :user
+    header('token', @user.token)
     @artist1 = create :artist_with_albums
     @artist2 = create :artist_with_albums
     @album = @artist1.albums.sample

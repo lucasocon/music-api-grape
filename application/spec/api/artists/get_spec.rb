@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe 'GET /api/artists' do
   before :all do
+    @user = create :user
+    header('token', @user.token)
     @a1 = create :artist_with_albums
     @a2 = create :artist
   end

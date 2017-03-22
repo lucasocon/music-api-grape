@@ -1,5 +1,9 @@
 class Api
   resource :songs do
+    before do
+      authenticate!
+    end
+
     get do
       songs = Models::Song.all
       Entities::Song.represent(songs)

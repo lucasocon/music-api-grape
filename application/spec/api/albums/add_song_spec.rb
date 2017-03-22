@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe 'PUT /api/albums/:id/songs' do
   before :all do
+    @user = create :user
+    header('token', @user.token)
     @album = create :album_with_songs
     @artist = create :artist_with_albums
   end

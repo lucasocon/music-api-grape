@@ -49,11 +49,12 @@ FactoryGirl.define do
 
   factory :playlist, class: Api::Models::Playlist do
     name { Faker::Name.name }
+    association :user, factory: :user, strategy: :create
 
     factory :playlist_with_songs do
       after(:create) do |playlist, evaluator|
-        5.times{ FactoryGirl.create(:album_with_songs) }
-        songs = Api::Models::Song.dataset.order{RANDOM{}}.first(10)
+        5.times { FactoryGirl.create(:album_with_songs) }
+        songs = Api::Models::Song.dataset.order { RANDOM {} }.first(10)
         songs.each do |song|
           FactoryGirl.create(:playlists_songs, playlist_id: playlist.id, song_id: song.id)
         end

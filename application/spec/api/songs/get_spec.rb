@@ -2,14 +2,16 @@ require 'spec_helper'
 
 describe 'GET /api/songs' do
   before :all do
+    @user = create :user
+    header('token', @user.token)
     create :artist_with_albums
-    @song = Api::Models::Song.dataset.order{RANDOM{}}.first
+    @song = Api::Models::Song.dataset.order { RANDOM {} }.first
   end
 
   it 'should pull all songs' do
-    get "api/v1.0/songs"
+    get 'api/v1.0/songs'
     body = response_body
-    response_names = body.map{ |x| x[:name] }
+    response_names = body.map { |x| x[:name] }
     db_names = Api::Models::Song.dataset.select_map(:name)
     expect(response_names).to eq(db_names)
   end

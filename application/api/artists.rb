@@ -1,5 +1,9 @@
 class Api
   resource :artists do
+    before do
+      authenticate!
+    end
+
     get do
       artists = Models::Artist.all
       Entities::Artist.represent(artists)

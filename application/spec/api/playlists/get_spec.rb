@@ -4,6 +4,8 @@ describe 'GET /api/playlist' do
   before :all do
     @p1 = create :playlist
     @p2 = create :playlist
+    @user = create :user
+    header('token', @user.token)
   end
 
   it 'should pull all playlists' do

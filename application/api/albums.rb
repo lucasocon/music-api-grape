@@ -1,5 +1,9 @@
 class Api
   resource :albums do
+    before do
+      authenticate!
+    end
+
     get do
       albums = Models::Album.all
       Entities::Album.represent(albums)

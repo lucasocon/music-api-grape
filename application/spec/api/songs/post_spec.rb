@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe 'POST /api/songs' do
   before :all do
+    @user = create :user
+    header('token', @user.token)
     @album = create :album
     @song_attributes = {
       name: Faker::Name.name,
