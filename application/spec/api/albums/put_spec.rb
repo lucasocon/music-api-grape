@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe 'PUT /api/albums' do
   before :all do
+    @user = create :user
+    header('token', @user.token)
     @album = create :album
     @album_attributes = {
       name: Faker::Name.name,

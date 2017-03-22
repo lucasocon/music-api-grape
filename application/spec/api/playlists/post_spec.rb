@@ -2,8 +2,11 @@ require 'spec_helper'
 
 describe 'POST /api/playlists' do
   before :all do
+    @user = create :user
+    header('token', @user.token)
     @playlist_attributes = {
-      name: Faker::Name.name
+      name: Faker::Name.name,
+      user_id: @user.id
     }
   end
 
@@ -16,6 +19,6 @@ describe 'POST /api/playlists' do
     post('api/v1.0/playlists', {})
     body = response_body
     expect(last_response.status).to eq(400)
-    expect(body.keys).to eq([:name])
+    expect(body.keys).to eq([:name, :user_id])
   end
 end

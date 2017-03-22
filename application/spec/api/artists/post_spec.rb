@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe 'POST /api/artist' do
   before :all do
+    @user = create :user
+    header('token', @user.token)
     @artist_attributes = {
       name: Faker::Name.name,
       bio: Faker::Lorem.paragraph

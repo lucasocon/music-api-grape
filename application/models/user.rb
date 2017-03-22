@@ -6,6 +6,7 @@ class Api
       include AbilityList::Helpers
 
       one_to_many :user_tokens
+      one_to_many :playlists
 
       def after_create
         update_token!

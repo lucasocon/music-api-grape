@@ -52,7 +52,6 @@ class Api < Grape::API
     error! ret, 400
   end
 
-  helpers SharedParams
   helpers ApiResponse
   include Auth
 

@@ -4,8 +4,9 @@ describe 'PUT /api/playlists' do
   before :all do
     @playlist = create :playlist
     @playlist_attributes = {
-      name: Faker::Name.name,
+      name: Faker::Name.name
     }
+    header('token', @playlist.user.token)
   end
 
   it 'should update playlist attributes' do

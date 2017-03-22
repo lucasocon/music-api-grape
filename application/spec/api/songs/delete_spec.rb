@@ -2,8 +2,10 @@ require 'spec_helper'
 
 describe 'DELETE /api/songs' do
   before :all do
+    @user = create :user
+    header('token', @user.token)
     @playlist = create(:playlist_with_songs)
-    @song = Api::Models::Song.dataset.order{RANDOM{}}.first
+    @song = Api::Models::Song.dataset.order { RANDOM {} }.first
   end
 
   it 'should delete song' do
