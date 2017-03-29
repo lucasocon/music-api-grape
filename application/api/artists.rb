@@ -1,24 +1,23 @@
 class Api
   resource :artists do
     get do
-      artists = Models::Artist.all
-      Entities::Artist.represent(artists)
+      cached_response(Entities::Artist) { Models::Artist.all }
     end
 
     post do
       result = CreateArtistValidation.new(params).validate
       if result.success? && artist = Models::Artist.create(result.output)
-        Entities::Artist.represent(artist)
+        call_cache(Entities::Artist) { artist }
       else
         error!(result.messages, 400)
       end
     end
 
     get ':id' do
-      artist = Models::Artist[params[:id]]
+      artist = cached_response(Entities::Artist) { Models::Artist[params[:id]]
       return error!(:not_found, 404) unless artist
 
-      Entities::Artist.represent(artist)
+      artist
     end
 
     put ':id' do
@@ -26,9 +25,8 @@ class Api
       return error!(:not_found, 404) unless artist
 
       result = EditArtistValidation.new(params).validate
-      if result.success?
-        artist.update(result.output)
-        Entities::Artist.represent(artist)
+      if result.success? && artist.update(result.output)
+        call_cache(Entities::Artist) { artist }
       else
         error!(result.messages, 400)
       end
@@ -38,6 +36,7 @@ class Api
       artist = Models::Artist[params[:id]]
       return error!(:not_found, 404) unless artist
       artist.destroy
+      call_cache(Entities::Artist) { artist }
     end
   end
 end

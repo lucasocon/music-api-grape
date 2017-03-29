@@ -64,6 +64,8 @@ SEQUEL_DB.tables.each do |t|
   SEQUEL_DB.from(t).truncate unless t == :schema_migrations || t.to_s.match(/^oauth_/)
 end
 
+$redis.flushall
+
 Faker::Config.locale = 'en-US'
 
 RSpec.configure do |config|

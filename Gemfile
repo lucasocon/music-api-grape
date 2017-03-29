@@ -21,6 +21,7 @@ gem 'hanami-validations', '0.6.0' # form validation
 gem 'dry-validation', '0.10.4' # validation methods for reform
 gem 'ability_list', '0.0.4'
 gem 'activesupport', '5.0.0'
+gem 'redis', '~>3.2'
 
 group :development, :test do
   gem 'awesome_print', '1.7.0'

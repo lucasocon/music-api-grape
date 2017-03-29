@@ -21,7 +21,7 @@ describe 'GET /api/playlist' do
   end
 
   it 'should return not found' do
-    get "api/v1.0/playlists/#{rand * 1000}"
+    get "api/v1.0/playlists/#{Api::Models::Playlist.max(:id) + 1}"
     expect(last_response.status).to eq(404)
   end
 end
