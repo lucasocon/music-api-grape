@@ -1,24 +1,23 @@
 class Api
   resource :playlists do
     get do
-      playlists = Models::Playlist.all
-      Entities::Playlist.represent(playlists)
+      cached_response(Entities::Playlist) { Models::Playlist.all }
     end
 
     post do
       result = CreatePlaylistValidation.new(params).validate
       if result.success? && playlist = Models::Playlist.create(result.output)
-        Entities::Playlist.represent(playlist)
+        call_cache(Entities::Playlist) { playlist }
       else
         error!(result.messages, 400)
       end
     end
 
     get ':id' do
-      playlist = Models::Playlist[params[:id]]
+      playlist = cached_response(Entities::Playlist) { Models::Playlist[params[:id]] }
       return error!(:not_found, 404) unless playlist
 
-      Entities::User.represent(playlist)
+      playlist
     end
 
     put ':id' do
@@ -26,9 +25,8 @@ class Api
       return error!(:not_found, 404) unless playlist
 
       result = EditPlaylistValidation.new(params).validate
-      if result.success?
-        playlist.update(result.output)
-        Entities::Playlist.represent(playlist)
+      if result.success? && playlist.update(result.output)
+        call_cache(Entities::Playlist) { playlist }
       else
         error!(result.messages, 400)
       end
@@ -65,6 +63,7 @@ class Api
       return error!(:not_found, 404) unless playlist
 
       playlist.destroy
+      call_cache(Entities::Playlist) { playlist }
     end
   end
 end

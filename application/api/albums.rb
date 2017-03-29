@@ -1,24 +1,23 @@
 class Api
   resource :albums do
     get do
-      albums = Models::Album.all
-      Entities::Album.represent(albums)
+      cached_response(Entities::Album) { Models::Album.all }
     end
 
     post do
       result = CreateAlbumValidation.new(params).validate
       if result.success? && album = Models::Album.create(result.output)
-        Entities::Album.represent(album)
+        call_cache(Entities::Album) { album }
       else
         error!(result.messages, 400)
       end
     end
 
     get ':id' do
-      album = Models::Album[params[:id]]
+      album = cached_response(Entities::Album) { Models::Album[params[:id]] }
       return error!(:not_found, 404) unless album
 
-      Entities::Album.represent(album)
+      album
     end
 
     put ':id' do
@@ -26,9 +25,8 @@ class Api
       return error!(:not_found, 404) unless album
 
       result = EditAlbumValidation.new(params).validate
-      if result.success?
-        album.update(result.output)
-        Entities::Album.represent(album)
+      if result.success? && album.update(result.output)
+        call_cache(Entities::Album) { album }
       else
         error!(result.messages, 400)
       end
@@ -38,6 +36,7 @@ class Api
       album = Models::Album[params[:id]]
       return error!(:not_found, 404) unless album
       album.destroy
+      call_cache(Entities::Album) { album }
     end
   end
 end
